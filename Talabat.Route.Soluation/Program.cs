@@ -8,7 +8,7 @@ namespace Talabat.Route.Soluation
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task  Main(string[] args)
         {
             #region createhostbuilder ==>configreServices
             var WebApplicationbuilder = WebApplication.CreateBuilder(args);
@@ -33,7 +33,27 @@ namespace Talabat.Route.Soluation
 
 
             #region configre
-            // Configure the HTTP request pipeline.
+
+
+            using var Scope = app.Services.CreateScope();
+            var services = Scope.ServiceProvider;
+
+            var _DbContext = services.GetRequiredService<StoreContext>();
+
+            var LoggerFactory = services.GetRequiredService<ILoggerFactory>();
+            try
+            {
+                await _DbContext.Database.MigrateAsync();
+            }
+            catch (Exception ex)
+            {
+
+                var logger = LoggerFactory.CreateLogger<Program>();
+                logger.LogError(ex, "an error has happened while migrating");
+
+
+            }
+            // Config  throw;ure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
