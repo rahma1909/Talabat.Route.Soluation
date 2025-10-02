@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Talabat.Repository.Data;
+using Talabat.Repository.Data.DataSeed;
 
 namespace Talabat.Route.Soluation
  
@@ -34,6 +35,7 @@ namespace Talabat.Route.Soluation
 
             #region configre
 
+            #region Update-Database
 
             using var Scope = app.Services.CreateScope();
             var services = Scope.ServiceProvider;
@@ -43,7 +45,8 @@ namespace Talabat.Route.Soluation
             var LoggerFactory = services.GetRequiredService<ILoggerFactory>();
             try
             {
-                await _DbContext.Database.MigrateAsync();
+                await _DbContext.Database.MigrateAsync();//update-database
+                await StoreContextSeed.SeedAsync(_DbContext);
             }
             catch (Exception ex)
             {
@@ -52,7 +55,8 @@ namespace Talabat.Route.Soluation
                 logger.LogError(ex, "an error has happened while migrating");
 
 
-            }
+            } 
+            #endregion
             // Config  throw;ure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
