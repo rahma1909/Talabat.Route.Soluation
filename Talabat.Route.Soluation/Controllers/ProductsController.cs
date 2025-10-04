@@ -26,6 +26,16 @@ namespace Talabat.Route.Soluation.Controllers
 
             return Ok(products);
         }
+
+        [HttpGet("{id}")]
+
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _productsRepo.GetAsync(id);
+            if (product is null)
+                return NotFound();
+            return Ok(product);
+        }
     }
 }
  
