@@ -15,5 +15,17 @@ namespace Talabat.Route.Soluation.Controllers
         {
             _productsRepo = ProductsRepo;
         }
+
+
+
+        [HttpGet]
+
+        public async Task<ActionResult<Product>> GetProducts()
+        {
+            var products = await _productsRepo.GetAllAsync();
+
+            return Ok(products);
+        }
     }
 }
+ 
